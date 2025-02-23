@@ -20,7 +20,7 @@ print(f"Spectral Norms: W1={sigma_W1:.3f}, W2={sigma_W2:.3f}, W_out={sigma_W_out
 print(f"Estimated Lipschitz Constant L: {L:.3f}")
 
 # Rademacher complexity upper bound
-def compute_rademacher_bound(n, L, C=2):
+def compute_rademacher_bound(n, L, C=2): # C is from experience
     m = 1251
     result = C * (L * np.sqrt(m) * np.log(n)) / np.sqrt(n)
     return result
