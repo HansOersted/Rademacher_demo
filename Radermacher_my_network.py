@@ -1,29 +1,31 @@
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 
-# The weigt matrix of the neural network
+# generate random weights
 W1 = torch.randn(32, 2)
 W2 = torch.randn(32, 32)
 W_out = torch.randn(3, 32)
 
-# the largest singular value of each layer
+# the maximum singular value of a matrix
 sigma_W1 = torch.linalg.svdvals(W1)[0]
 sigma_W2 = torch.linalg.svdvals(W2)[0]
 sigma_W_out = torch.linalg.svdvals(W_out)[0]
 
-# Lipschitz constant L
+# Lipschitz constant
 L = sigma_W1 * sigma_W2 * sigma_W_out
-
 print(f"Spectral Norms: W1={sigma_W1:.3f}, W2={sigma_W2:.3f}, W_out={sigma_W_out:.3f}")
 print(f"Estimated Lipschitz Constant L: {L:.3f}")
 
-# calculate Rademacher complexity upper bound
-def compute_rademacher_bound(n, L, C=2):  # C from experience
-    m = 1251 # number of parameters (2×32+32)+(32×32+32)+(32×3+3)
-    return C * (L * np.sqrt(m) * np.log(n)) / np.sqrt(n)
+# Rademacher complexity upper bound
+def compute_rademacher_bound(n, L, C=2):
+    m = 1251
+    result = C * (L * np.sqrt(m) * np.log(n)) / np.sqrt(n)
+    return result
 
-# calculate Rademacher complexity in different sample sizes
+# Calculate the Rademacher complexity upper bound
 n_values = np.logspace(1, 5, 100)
 rademacher_bound = compute_rademacher_bound(n_values, L)
 
